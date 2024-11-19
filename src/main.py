@@ -81,11 +81,10 @@ def select_algorithm(G):
     :param G: the graph
     """
     choice = 0
-    while choice != 3:
+    while choice != 2:
         print("*** Select algorithm ***")
         print("1) A*")
-        print("2) Dijkstra")
-        print("3) Quit")
+        print("2) Quit")
         try:
             choice = int(input())
         except ValueError:
@@ -94,9 +93,6 @@ def select_algorithm(G):
 
         if choice == 1: # A*
             a_star(G)
-
-        elif choice == 2: # dijkstra
-            dijkstra(G)
 
 def heuristic(node1, node2, pos):
     """
@@ -183,9 +179,6 @@ def a_star(G):
         plt.savefig('../imgs/'+image_name+'.png')
         plt.close()
 
-    print()
-
-def dijkstra(G):
     print()
 
 def main():
