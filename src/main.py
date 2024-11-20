@@ -96,27 +96,27 @@ def select_algorithm(G):
 
 def heuristic(node1, node2, pos):
     """
-    Calculates the Euclidean distance between two nodes
+    Calculates the Euclidean distance between two nodes as the h value
     :param node1:
     :param node2:
     :param pos:
     :return:
     """
-    (x1, y1), (x2, y2) = pos[node1], pos[node2]
-    return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+    (x1, y1), (x2, y2) = pos[node1], pos[node2] # get positions of nodes
+    return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5 # pythagorean theorem
 
 def reconstruct_path(came_from, current):
     """
-
-    :param came_from:
-    :param current:
-    :return:
+    Reconstructs path given came_from and current node
+    :param came_from: dictionary where key is node and value is predecessor
+    :param current: current node
+    :return: the path as list of nodes
     """
-    path = []
+    path = [] # path list
     while current is not None:
-        path.append(current)
-        current = came_from[current]
-    return path[::-1]
+        path.append(current) # add current node
+        current = came_from[current] # set current to predecessor
+    return path[::-1] # reverse list to be in sequential order
 
 def a_star(G):
     """
@@ -135,37 +135,37 @@ def a_star(G):
 
     pos = nx.shell_layout(G)  # get positioning of graph
 
-    open_set = []
-    heapq.heappush(open_set, (0, start_node))
-    came_from = {start_node: None}
-    g_score = {node: float('inf') for node in G.nodes}
-    g_score[start_node] = 0
-    f_score = {node: float('inf') for node in G.nodes}
-    f_score[start_node] = heuristic(start_node, end_node, pos)
+    open_set = [] # heap to store f scores and nodes explored
+    heapq.heappush(open_set, (0, start_node)) # add initial node to heap
+    came_from = {start_node: None} # came from dictionary where key is node and value is predecessor
+    g_score = {node: float('inf') for node in G.nodes} # dictionary to store g scores for each node
+    g_score[start_node] = 0 # set g score of start node to 0
+    f_score = {node: float('inf') for node in G.nodes} # dictionary to store f scores for each node
+    f_score[start_node] = heuristic(start_node, end_node, pos) # set f score of start node to h score
 
-    while open_set:
-        _, current = heapq.heappop(open_set)
+    while open_set: # while there's more nodes explored
+        _, current = heapq.heappop(open_set) # pop from the explored set, used to find smallest f score
 
-        if current == end_node:
-            path = reconstruct_path(came_from, current)
+        if current == end_node: # reached end
+            path = reconstruct_path(came_from, current) # reconstruct the path
             break
 
-        for neighbor in G.neighbors(current):
-            tentative_g_score = g_score[current] + G[current][neighbor].get('weight', 1)
+        for neighbor in G.neighbors(current): # for each neighbor in
+            tentative_g_score = g_score[current] + G[current][neighbor].get('weight', 1) # g score is normal g score + weight
 
-            if tentative_g_score < g_score[neighbor]:
-                came_from[neighbor] = current
-                g_score[neighbor] = tentative_g_score
-                f_score[neighbor] = g_score[neighbor] + heuristic(neighbor, end_node, pos)
-                heapq.heappush(open_set, (f_score[neighbor], neighbor))
-    else:
-        path = []
-    path_edges = list(zip(path, path[1:]))
+            if tentative_g_score < g_score[neighbor]: # if this g score is better than the previously recorded g score
+                came_from[neighbor] = current # update came_from to note better way to reach neighbor
+                g_score[neighbor] = tentative_g_score # update g score
+                f_score[neighbor] = g_score[neighbor] + heuristic(neighbor, end_node, pos) # update f score
+                heapq.heappush(open_set, (f_score[neighbor], neighbor)) # add neighbor to explored set
+    else: # if there's no more nodes to be explored and end not reached
+        path = [] # no feasible path to end
 
-    draw_with_path(G, path, path_edges)
-
+    path_edges = list(zip(path, path[1:])) # get edges specifically
+    draw_with_path(G, path, path_edges) # draw the graph with the path
     plt.show()
     print()
+
     save = ''
     while save != 'y' and save != 'n':
         save = input("Would you like to save the image? (y/n) >>>")

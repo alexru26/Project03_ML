@@ -14,18 +14,25 @@ Run ```main.py``` to use the program.
 - ChatGPT
 - [networkx](https://networkx.org/documentation/stable/tutorial.html)
 - [pickle](https://docs.python.org/3/library/pickle.html)
+- https://www.youtube.com/watch?v=i0x5fj4PqP4&ab_channel=Tarodev
 
-## How it works
-- Allows user to create and load new graphs
-- Graph generation and visualization with networkx
+## Functionality
+- Create and load new graphs
+- Graph generation and visualization wit*h networkx
+- Save and modify graphs
+- Can choose start and end nodes and run A* pathfinding algorithm
 
 ## Reasoning and Issues
 - Visualization
   - I used the shell layout because it was the most clear
   - Tried spring, spectral, etc. layouts, but too condensed and confusing
-- 
+- h score
+  - No good way to find node's distance to target
+  - Only feasible way is with Euclidean distance
+  - Issue is that Euclidean distance is not very accurate
 
 ## Further Improvements
 - Interactive UI instead of CLI
   - More intuitive and less clunky
-- 
+- More consistent way of getting h score
+- Better visualization
